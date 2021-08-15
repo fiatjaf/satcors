@@ -1,7 +1,6 @@
-package pancors
+package main
 
 import (
-	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -75,14 +74,4 @@ func handleProxy(w http.ResponseWriter, r *http.Request, origin string, credenti
 // responses with CORS headers
 func HandleProxy(w http.ResponseWriter, r *http.Request) {
 	handleProxy(w, r, "*", "true")
-}
-
-// HandleProxyFromHosts is a handler which passes requests only from specified to the host
-func HandleProxyWith(origin string, credentials string) func(http.ResponseWriter, *http.Request) {
-	if !(credentials == "true" || credentials == "false") {
-		log.Panicln("Access-Control-Allow-Credentials can only be 'true' or 'false'")
-	}
-	return func(w http.ResponseWriter, r *http.Request) {
-		handleProxy(w, r, origin, credentials)
-	}
 }
