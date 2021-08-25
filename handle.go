@@ -70,8 +70,13 @@ func handleProxy(w http.ResponseWriter, r *http.Request, origin string, credenti
 	proxy.ServeHTTP(w, r)
 }
 
-// HandleProxy is a handler which passes requests to the host and returns their
-// responses with CORS headers
 func HandleProxy(w http.ResponseWriter, r *http.Request) {
+	shouldBeAllowed := checkRequest(r.Header.Get("Referer"))
+
+	if !shouldBeAllowed {
+		w.WriteHeader(402)
+		return
+	}
+
 	handleProxy(w, r, "*", "true")
 }
